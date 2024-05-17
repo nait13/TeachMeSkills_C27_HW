@@ -1,14 +1,30 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>org.example</groupId>
-  <artifactId>TeachMeSkills_C27_HW</artifactId>
-  <packaging>war</packaging>
-  <version>1.0</version>
-  <name>TeachMeSkills_C27_HW Maven Webapp</name>
-  <dependencies>
-  </dependencies>
-  <build>
-    <finalName>TeachMeSkills_C27_HW</finalName>
-  </build>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.example</groupId>
+    <artifactId>TeachMeSkills_C27_HW</artifactId>
+    <packaging>war</packaging>
+    <version>1.0</version>
+    <name>TeachMeSkills_C27_HW Maven Webapp</name>
+    <dependencies>
+        <dependency>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
+            <version>6.0.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jstl</artifactId>
+            <version>1.2</version>
+        </dependency>
+        <dependency>
+            <groupId>taglibs</groupId>
+            <artifactId>standard</artifactId>
+            <version>1.1.2</version>
+        </dependency>
+    </dependencies>
+    <build>
+        <finalName>TeachMeSkills_C27_HW</finalName>
+    </build>
 </project>
