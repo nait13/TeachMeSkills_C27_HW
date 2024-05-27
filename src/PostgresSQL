@@ -1,0 +1,21 @@
+create table "person" (
+	id INT not NULL UNIQUE,
+	name VARCHAR(50) not NULL,
+	surname VARCHAR(50) not NULL,
+	age INT not NULL,
+	passport_number VARCHAR(9) not NULL UNIQUE
+);
+
+select * from "person";
+
+insert into "person"(id,name,surname,age,passport_number) values (1,'User','TMS', 29,'HB12123');
+insert into "person"(id,name,surname,age,passport_number) values (2,'Pasha','Ivanov', 29,'HB11111');
+insert into "person"(id,name,surname,age,passport_number) values (3,'Tania','TMS', 29,'HB22222');
+insert into "person"(id,name,surname,age,passport_number) values (4,'Gena','Ivanov', 30,'HB33333');
+insert into "person"(id,name,surname,age,passport_number) values (5,'Misha','Ivanov', 29,'HB44444');
+insert into "person"(id,name,surname,age,passport_number) values (6,'Ded','SuperStar', 99,'HB55555');
+
+update "person" set age = 10 where name = 'User';
+
+
+delete from "person" where age > 50;
