@@ -1,9 +1,9 @@
 create table "person" (
 	id INT not NULL UNIQUE,
-	name VARCHAR(50) not NULL,
-	surname VARCHAR(50) not NULL,
-	age INT not NULL,
-	passport_number VARCHAR(9) not NULL UNIQUE
+	name VARCHAR(50) NOT NULL,
+	surname VARCHAR(50) NOT NULL,
+	age INT NOT NULL,
+	passport_number VARCHAR(9) NOT NULL UNIQUE
 );
 
 select * from "person";
