@@ -7,6 +7,17 @@
   <version>1.0</version>
   <name>TeachMeSkills_C27_HW Maven Webapp</name>
   <dependencies>
+    <dependency>
+      <groupId>jakarta.servlet</groupId>
+      <artifactId>jakarta.servlet-api</artifactId>
+      <version>6.0.0</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.postgresql</groupId>
+      <artifactId>postgresql</artifactId>
+      <version>42.7.2</version>
+    </dependency>
   </dependencies>
   <build>
     <finalName>TeachMeSkills_C27_HW</finalName>
