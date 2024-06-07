@@ -16,7 +16,7 @@ import java.sql.SQLException;
 public class CreateUserServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        getServletContext().getRequestDispatcher("/WEB-INF/createUserForm.jsp").forward(req,resp);
+        getServletContext().getRequestDispatcher("/WEB-INF/createUserForm.jsp").forward(req, resp);
     }
 
     @Override
@@ -28,11 +28,12 @@ public class CreateUserServlet extends HttpServlet {
             return;
         }
         PreparedStatement preparedStatement = null;
+        Connection connection = null;
         int prepareResultSet;
 
         try {
             PostgresDriverManager driverManager = PostgresDriverManager.getInstance();
-            Connection connection = driverManager.getConnection();
+            connection = driverManager.getConnection();
 
             preparedStatement = connection.prepareStatement("INSERT INTO users(name,login) VALUES(?,?)");
             preparedStatement.setString(1, userName);
@@ -41,15 +42,27 @@ public class CreateUserServlet extends HttpServlet {
             prepareResultSet = preparedStatement.executeUpdate();
 
             if (prepareResultSet > 0) {
-                req.setAttribute("body","Success insert");
-                getServletContext().getRequestDispatcher("/WEB-INF/information.jsp").forward(req,resp);
-            }else {
-                req.setAttribute("body","Error insert");
-                getServletContext().getRequestDispatcher("/WEB-INF/information.jsp").forward(req,resp);
+                req.setAttribute("body", "Success insert");
+                getServletContext().getRequestDispatcher("/WEB-INF/information.jsp").forward(req, resp);
+            } else {
+                req.setAttribute("body", "Error insert");
+                getServletContext().getRequestDispatcher("/WEB-INF/information.jsp").forward(req, resp);
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

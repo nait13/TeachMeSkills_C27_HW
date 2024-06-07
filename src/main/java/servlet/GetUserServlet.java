@@ -20,32 +20,30 @@ public class GetUserServlet extends HttpServlet {
         String userId = req.getParameter("id");
 
 
-        if (userId == null || userId.isEmpty() ){
-            getServletContext().getRequestDispatcher("/WEB-INF/getUserForm.jsp").forward(req,resp);
+        if (userId == null || userId.isEmpty()) {
+            getServletContext().getRequestDispatcher("/WEB-INF/getUserForm.jsp").forward(req, resp);
             return;
         }
 
-        PreparedStatement preparedStatement = null;
         ResultSet prepareResultSet = null;
 
-        try {
-            PostgresDriverManager driverManager = PostgresDriverManager.getInstance();
-            Connection connection = driverManager.getConnection();
+        try (Connection connection = PostgresDriverManager.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO users(name,login) VALUES(?,?)"))
+        {
 
-            preparedStatement = connection.prepareStatement("SELECT * FROM users WHERE id = ?");
-            preparedStatement.setInt(1,Integer.parseInt(userId));
+            preparedStatement.setInt(1, Integer.parseInt(userId));
 
             prepareResultSet = preparedStatement.executeQuery();
 
 
-            while (prepareResultSet.next()){
+            while (prepareResultSet.next()) {
                 System.out.print(" " + prepareResultSet.getInt("id"));
                 System.out.print(" " + prepareResultSet.getString("name"));
                 System.out.println(" " + prepareResultSet.getString("login"));
             }
-            if(prepareResultSet != null) {
-                req.setAttribute("body","Success");
-                getServletContext().getRequestDispatcher("/WEB-INF/information.jsp").forward(req,resp);
+            if (prepareResultSet != null) {
+                req.setAttribute("body", "Success");
+                getServletContext().getRequestDispatcher("/WEB-INF/information.jsp").forward(req, resp);
             }
         } catch (SQLException e) {
             e.printStackTrace();
