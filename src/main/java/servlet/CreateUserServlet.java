@@ -21,16 +21,15 @@ public class CreateUserServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String userName = req.getParameter("nameInput");
-        String userLogin = req.getParameter("login");
+        String userName = req.getParameter("nameInput").trim();
+        String userLogin = req.getParameter("login").trim();
 
         if (userLogin == null || userLogin.isEmpty() || userName == null || userName.isEmpty()) {
+            getServletContext().getRequestDispatcher("/WEB-INF/createUserForm.jsp").forward(req, resp);
             return;
         }
         PreparedStatement preparedStatement = null;
         Connection connection = null;
-        int prepareResultSet;
-
         try {
             PostgresDriverManager driverManager = PostgresDriverManager.getInstance();
             connection = driverManager.getConnection();
@@ -39,7 +38,7 @@ public class CreateUserServlet extends HttpServlet {
             preparedStatement.setString(1, userName);
             preparedStatement.setString(2, userLogin);
 
-            prepareResultSet = preparedStatement.executeUpdate();
+            int prepareResultSet = preparedStatement.executeUpdate();
 
             if (prepareResultSet > 0) {
                 req.setAttribute("body", "Success insert");

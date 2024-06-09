@@ -22,28 +22,29 @@ public class DeleteUserServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String userId = req.getParameter("userId");
+        String userId = req.getParameter("userId").trim();
 
 
         if (userId == null || userId.isEmpty()) {
+            getServletContext().getRequestDispatcher("/WEB-INF/deleteUserForm.jsp").forward(req, resp);
             return;
         }
 
-        int prepareResultSet;
         try (Connection connection = PostgresDriverManager.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM users WHERE id = ?"))
         {
 
             preparedStatement.setInt(1, Integer.parseInt(userId));
-            prepareResultSet = preparedStatement.executeUpdate();
+
+            int prepareResultSet = preparedStatement.executeUpdate();
 
             if (prepareResultSet > 0) {
-                req.setAttribute("body","Success delete");
-                getServletContext().getRequestDispatcher("/WEB-INF/information.jsp").forward(req,resp);
-            }else {
-                req.setAttribute("body","Error delete");
-                getServletContext().getRequestDispatcher("/WEB-INF/information.jsp").forward(req,resp);
+                req.setAttribute("body", "User id :" + userId + " Success delete");
+            } else {
+                req.setAttribute("body", "Error delete");
             }
+            getServletContext().getRequestDispatcher("/WEB-INF/information.jsp").forward(req, resp);
+
         } catch (SQLException e) {
             e.printStackTrace();
         }

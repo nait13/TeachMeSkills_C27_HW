@@ -25,26 +25,29 @@ public class GetUserServlet extends HttpServlet {
             return;
         }
 
-        ResultSet prepareResultSet = null;
-
         try (Connection connection = PostgresDriverManager.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO users(name,login) VALUES(?,?)"))
-        {
+             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM users where id = ?")) {
 
             preparedStatement.setInt(1, Integer.parseInt(userId));
 
-            prepareResultSet = preparedStatement.executeQuery();
+            ResultSet prepareResultSet = preparedStatement.executeQuery();
 
-
+            String name = null;
+            String login = null;
             while (prepareResultSet.next()) {
+                name = prepareResultSet.getString("name");
+                login = prepareResultSet.getString("login");
                 System.out.print(" " + prepareResultSet.getInt("id"));
                 System.out.print(" " + prepareResultSet.getString("name"));
                 System.out.println(" " + prepareResultSet.getString("login"));
             }
-            if (prepareResultSet != null) {
-                req.setAttribute("body", "Success");
-                getServletContext().getRequestDispatcher("/WEB-INF/information.jsp").forward(req, resp);
+
+            if (name != null && login != null) {
+                req.setAttribute("body", "Name: " + name + ", Login: " + login);
+            } else {
+                req.setAttribute("body", "Not found user!");
             }
+            getServletContext().getRequestDispatcher("/WEB-INF/information.jsp").forward(req, resp);
         } catch (SQLException e) {
             e.printStackTrace();
         }
