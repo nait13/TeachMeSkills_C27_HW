@@ -26,7 +26,6 @@ public class ChangeLoginUserServlet extends HttpServlet {
 
         if (userId == null || userId.isEmpty() || newLogin == null || newLogin.isEmpty()) {
             getServletContext().getRequestDispatcher("/WEB-INF/updateLogin.jsp").forward(req, resp);
-            return;
         }
 
         try (Connection connection = PostgresDriverManager.getInstance().getConnection();

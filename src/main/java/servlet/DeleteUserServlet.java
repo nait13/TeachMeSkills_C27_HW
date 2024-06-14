@@ -27,7 +27,6 @@ public class DeleteUserServlet extends HttpServlet {
 
         if (userId == null || userId.isEmpty()) {
             getServletContext().getRequestDispatcher("/WEB-INF/deleteUserForm.jsp").forward(req, resp);
-            return;
         }
 
         try (Connection connection = PostgresDriverManager.getInstance().getConnection();

@@ -22,7 +22,6 @@ public class GetUserServlet extends HttpServlet {
 
         if (userId == null || userId.isEmpty()) {
             getServletContext().getRequestDispatcher("/WEB-INF/getUserForm.jsp").forward(req, resp);
-            return;
         }
 
         try (Connection connection = PostgresDriverManager.getInstance().getConnection();
@@ -41,7 +40,6 @@ public class GetUserServlet extends HttpServlet {
                 System.out.print(" " + prepareResultSet.getString("name"));
                 System.out.println(" " + prepareResultSet.getString("login"));
             }
-
             if (name != null && login != null) {
                 req.setAttribute("body", "Name: " + name + ", Login: " + login);
             } else {

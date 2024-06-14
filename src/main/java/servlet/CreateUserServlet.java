@@ -26,7 +26,6 @@ public class CreateUserServlet extends HttpServlet {
 
         if (userLogin == null || userLogin.isEmpty() || userName == null || userName.isEmpty()) {
             getServletContext().getRequestDispatcher("/WEB-INF/createUserForm.jsp").forward(req, resp);
-            return;
         }
         PreparedStatement preparedStatement = null;
         Connection connection = null;
