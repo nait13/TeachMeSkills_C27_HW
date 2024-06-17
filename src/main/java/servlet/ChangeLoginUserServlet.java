@@ -26,25 +26,24 @@ public class ChangeLoginUserServlet extends HttpServlet {
 
         if (userId == null || userId.isEmpty() || newLogin == null || newLogin.isEmpty()) {
             getServletContext().getRequestDispatcher("/WEB-INF/updateLogin.jsp").forward(req, resp);
-        }
+        } else {
+            try (Connection connection = PostgresDriverManager.getInstance().getConnection();
+                 PreparedStatement preparedStatement = connection.prepareStatement("UPDATE users SET login = ? WHERE id = ?")) {
+                preparedStatement.setString(1, newLogin);
+                preparedStatement.setInt(2, Integer.parseInt(userId));
 
-        try (Connection connection = PostgresDriverManager.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement("UPDATE users SET login = ? WHERE id = ?"))
-        {
-            preparedStatement.setString(1, newLogin);
-            preparedStatement.setInt(2, Integer.parseInt(userId));
+                int prepareResultSet = preparedStatement.executeUpdate();
 
-            int prepareResultSet = preparedStatement.executeUpdate();
+                if (prepareResultSet > 0) {
+                    req.setAttribute("body", "Success change login");
+                } else {
+                    req.setAttribute("body", "Error change login ");
+                }
+                getServletContext().getRequestDispatcher("/WEB-INF/information.jsp").forward(req, resp);
 
-            if (prepareResultSet > 0) {
-                req.setAttribute("body", "Success change login");
-            } else {
-                req.setAttribute("body", "Error change login ");
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
-            getServletContext().getRequestDispatcher("/WEB-INF/information.jsp").forward(req, resp);
-
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
     }
 }

@@ -26,40 +26,41 @@ public class CreateUserServlet extends HttpServlet {
 
         if (userLogin == null || userLogin.isEmpty() || userName == null || userName.isEmpty()) {
             getServletContext().getRequestDispatcher("/WEB-INF/createUserForm.jsp").forward(req, resp);
-        }
-        PreparedStatement preparedStatement = null;
-        Connection connection = null;
-        try {
-            PostgresDriverManager driverManager = PostgresDriverManager.getInstance();
-            connection = driverManager.getConnection();
-
-            preparedStatement = connection.prepareStatement("INSERT INTO users(name,login) VALUES(?,?)");
-            preparedStatement.setString(1, userName);
-            preparedStatement.setString(2, userLogin);
-
-            int prepareResultSet = preparedStatement.executeUpdate();
-
-            if (prepareResultSet > 0) {
-                req.setAttribute("body", "Success insert");
-                getServletContext().getRequestDispatcher("/WEB-INF/information.jsp").forward(req, resp);
-            } else {
-                req.setAttribute("body", "Error insert");
-                getServletContext().getRequestDispatcher("/WEB-INF/information.jsp").forward(req, resp);
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
+        } else {
+            PreparedStatement preparedStatement = null;
+            Connection connection = null;
             try {
-                if (connection != null) {
-                    connection.close();
-                }
-                if (preparedStatement != null) {
-                    preparedStatement.close();
+                PostgresDriverManager driverManager = PostgresDriverManager.getInstance();
+                connection = driverManager.getConnection();
+
+                preparedStatement = connection.prepareStatement("INSERT INTO users(name,login) VALUES(?,?)");
+                preparedStatement.setString(1, userName);
+                preparedStatement.setString(2, userLogin);
+
+                int prepareResultSet = preparedStatement.executeUpdate();
+
+                if (prepareResultSet > 0) {
+                    req.setAttribute("body", "Success insert");
+                    getServletContext().getRequestDispatcher("/WEB-INF/information.jsp").forward(req, resp);
+                } else {
+                    req.setAttribute("body", "Error insert");
+                    getServletContext().getRequestDispatcher("/WEB-INF/information.jsp").forward(req, resp);
                 }
 
             } catch (SQLException e) {
                 e.printStackTrace();
+            } finally {
+                try {
+                    if (connection != null) {
+                        connection.close();
+                    }
+                    if (preparedStatement != null) {
+                        preparedStatement.close();
+                    }
+
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }

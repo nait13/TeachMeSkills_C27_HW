@@ -27,25 +27,24 @@ public class DeleteUserServlet extends HttpServlet {
 
         if (userId == null || userId.isEmpty()) {
             getServletContext().getRequestDispatcher("/WEB-INF/deleteUserForm.jsp").forward(req, resp);
-        }
+        } else {
+            try (Connection connection = PostgresDriverManager.getInstance().getConnection();
+                 PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM users WHERE id = ?")) {
 
-        try (Connection connection = PostgresDriverManager.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM users WHERE id = ?"))
-        {
+                preparedStatement.setInt(1, Integer.parseInt(userId));
 
-            preparedStatement.setInt(1, Integer.parseInt(userId));
+                int prepareResultSet = preparedStatement.executeUpdate();
 
-            int prepareResultSet = preparedStatement.executeUpdate();
+                if (prepareResultSet > 0) {
+                    req.setAttribute("body", "User id :" + userId + " Success delete");
+                } else {
+                    req.setAttribute("body", "Error delete");
+                }
+                getServletContext().getRequestDispatcher("/WEB-INF/information.jsp").forward(req, resp);
 
-            if (prepareResultSet > 0) {
-                req.setAttribute("body", "User id :" + userId + " Success delete");
-            } else {
-                req.setAttribute("body", "Error delete");
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
-            getServletContext().getRequestDispatcher("/WEB-INF/information.jsp").forward(req, resp);
-
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
     }
 }
