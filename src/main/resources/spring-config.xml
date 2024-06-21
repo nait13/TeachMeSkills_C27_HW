@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="inner" class="com.teachmeskills.lesson39.test.InnerClass" scope="prototype">
+        <property name="innerClass" value="INNER!!!!"/>
+    </bean>
+
+    <bean id="springHello" class="com.teachmeskills.lesson39.test.SpringHelloWorld" scope="prototype">
+        <property name="innerClass" ref="inner"/>
+        <property name="message" value="SPRING"/>
+    </bean>
+</beans>

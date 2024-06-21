@@ -7,6 +7,13 @@
   <version>1.0</version>
   <name>TeachMeSkills_C27_HW Maven Webapp</name>
   <dependencies>
+
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-context</artifactId>
+      <version>6.1.9</version>
+    </dependency>
+
   </dependencies>
   <build>
     <finalName>TeachMeSkills_C27_HW</finalName>

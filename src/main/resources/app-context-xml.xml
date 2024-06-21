@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+    <bean id="subTask1" class="com.teachmeskills.lesson39.SubTask">
+        <property name="name" value="Do work!"/>
+    </bean>
+
+    <bean id="subTask2" class="com.teachmeskills.lesson39.SubTask">
+        <property name="name" value="Just do it!"/>
+    </bean>
+
+    <bean id="task1" class="com.teachmeskills.lesson39.Task">
+        <property name="name" value="TASK1"/>
+        <property name="listSubTask">
+            <list>
+                <bean class="com.teachmeskills.lesson39.SubTask">
+                    <property name="name" value="subTask1"/>
+                </bean>
+                <bean class="com.teachmeskills.lesson39.SubTask">
+                    <property name="name" value="subTask2"/>
+                </bean>
+                <ref bean="subTask1"/>
+                <ref bean="subTask2"/>
+            </list>
+        </property>
+    </bean>
+</beans>
