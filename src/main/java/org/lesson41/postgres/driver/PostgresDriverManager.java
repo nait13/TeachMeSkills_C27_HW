@@ -1,32 +1,30 @@
-package pack;
+package org.lesson41.postgres.driver;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
+
+import javax.annotation.PostConstruct;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+@Component
 public class PostgresDriverManager {
-    private static PostgresDriverManager instance;
-    private static String URL = "jdbc:postgresql://localhost:5432/tms";
-    private static String USERNAME = "postgres";
-    private static String PASSWORD = "admin";
+    @Value("${db.url}")
+    private String URL;
+    @Value("${db.username}")
+    private String USERNAME;
+    @Value("${db.password}")
+    private String PASSWORD;
 
-    private PostgresDriverManager() {
-        init();
-    }
-
+    @PostConstruct
     private void init() {
         try {
             Class.forName("org.postgresql.Driver").getDeclaredConstructor().newInstance();
         } catch (Exception e) {
             System.out.println("Exception loading driver...");
         }
-    }
-
-    public static PostgresDriverManager getInstance() {
-        if (instance == null) {
-            instance = new PostgresDriverManager();
-        }
-        return instance;
     }
 
     public Connection getConnection() throws SQLException {
