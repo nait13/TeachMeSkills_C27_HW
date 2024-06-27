@@ -4,14 +4,14 @@ package org.lesson41.service;
 import org.lesson41.DTO.User;
 import org.lesson41.postgres.driver.PostgresDriverManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
-@Service
+@Repository
 public class UserService {
     @Autowired
     private PostgresDriverManager postgresDriverManager;
