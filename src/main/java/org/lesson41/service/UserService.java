@@ -5,7 +5,6 @@ import org.lesson41.DTO.User;
 import org.lesson41.postgres.driver.PostgresDriverManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.springframework.stereotype.Service;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -24,7 +23,11 @@ public class UserService {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             if (resultSet.next()) {
-                return new User(resultSet.getInt("id"), resultSet.getString("name"), resultSet.getString("login"));
+                User user = new User();
+                user.setId(resultSet.getInt("id"));
+                user.setName(resultSet.getString("name"));
+                user.setLogin(resultSet.getString("login"));
+                return user;
             }
 
         } catch (SQLException e) {

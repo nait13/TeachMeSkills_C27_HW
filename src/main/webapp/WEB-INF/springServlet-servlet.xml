@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+    <!--
+        <mvc:annotation-driven/> - говорит, что вся конфигурации будет происходить через аннотации.
+      -->
+    <mvc:annotation-driven/>
+    <!--
+        Говорим где искать классы которые помечены как аннотации!
+        @ComponentScan - можно через аннотацию
+     -->
+    <context:component-scan base-package="org.lesson41"/>
+    <context:property-placeholder location="classpath:postgresDriver.properties"/>
+
+    <!--  View Resolver конфигурация  -->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/jsp/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+
+    <!--    <mvc:interceptors>-->
+    <!--        <bean id="second" class="org.example.SecondInterceptor"/>-->
+    <!--    </mvc:interceptors>-->
+    <!--    <mvc:interceptors>-->
+    <!--        <bean id="first" class="org.example.MyInterceptor"/>-->
+    <!--    </mvc:interceptors>-->
+
+</beans>

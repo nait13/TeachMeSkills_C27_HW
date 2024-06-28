@@ -8,18 +8,18 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-public class ServletController {
+public class UserController {
     @Autowired
     private UserService userService;
 
     @GetMapping("/get")
-    public ModelAndView getUserForm(@RequestParam(value = "id", required = false) String id) {
+    public ModelAndView getUserForm(@RequestParam(name = "id", required = false) Integer id) {
         ModelAndView mav = new ModelAndView();
-        if (id == null || id.isEmpty()) {
+        if (id == null || id < 1) {
             mav.setViewName("getUserForm");
             return mav;
         } else {
-            User user = userService.getUserById(Integer.parseInt(id));
+            User user = userService.getUserById(id);
             if (user != null) {
                 mav.addObject("body", "Name: " + user.getName() + ", Login: " + user.getLogin());
             } else {
@@ -107,8 +107,9 @@ public class ServletController {
         }
 
     }
-    @ExceptionHandler(RuntimeException.class)
-    public String handleException(Exception e){
-        return "error";
-    }
+//    @ExceptionHandler(RuntimeException.class)
+//    public String handleException(Exception e){
+//        e.printStackTrace();
+//        return "error";
+//    }
 }
