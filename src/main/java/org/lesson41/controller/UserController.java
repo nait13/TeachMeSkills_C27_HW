@@ -62,17 +62,15 @@ public class UserController {
     }
 
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
-    public ModelAndView getDeleteUserInDB(@RequestParam("userId") String id) {
+    public ModelAndView getDeleteUserInDB(@RequestParam("userId") Integer id) {
         ModelAndView mav = new ModelAndView();
-        String userId = id.trim();
-
-        if (userId == null || userId.isEmpty()) {
+        if (id == null || id < 1) {
             mav.setViewName("deleteUserForm");
             return mav;
         } else {
-            boolean isDelete = userService.deleteUser(Integer.parseInt(userId));
+            boolean isDelete = userService.deleteUser(id);
             if (isDelete) {
-                mav.addObject("body", "User id :" + userId + " Success delete");
+                mav.addObject("body", "User id :" + id + " Success delete");
             } else {
                 mav.addObject("body", "Error delete");
             }
@@ -87,16 +85,15 @@ public class UserController {
     }
 
     @PostMapping("/change")
-    public ModelAndView changeLoginInDB(@RequestParam("userId") String id, @RequestParam("login") String login) {
+    public ModelAndView changeLoginInDB(@RequestParam("userId") Integer id, @RequestParam("login") String login) {
         ModelAndView mav = new ModelAndView();
-        String userId = id.trim();
         String userLogin = login.trim();
 
-        if (id == null || userId.isEmpty() || login == null || userLogin.isEmpty()) {
+        if (id == null || id < 1 || login == null || userLogin.isEmpty()) {
             mav.setViewName("updateLogin");
             return mav;
         } else {
-            boolean isUpdate = userService.updateUserLogin(Integer.parseInt(userId), userLogin);
+            boolean isUpdate = userService.updateUserLogin(id, userLogin);
             if (isUpdate) {
                 mav.addObject("body", "Success change login");
             } else {
@@ -107,9 +104,9 @@ public class UserController {
         }
 
     }
-//    @ExceptionHandler(RuntimeException.class)
-//    public String handleException(Exception e){
-//        e.printStackTrace();
-//        return "error";
-//    }
+    @ExceptionHandler(RuntimeException.class)
+    public String handleException(Exception e){
+        e.printStackTrace();
+        return "error";
+    }
 }
