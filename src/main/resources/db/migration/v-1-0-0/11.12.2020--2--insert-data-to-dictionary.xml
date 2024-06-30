@@ -1,0 +1,17 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+    <changeSet id="2" author="Oleg">
+        <sql>
+            INSERT INTO dictionary_status(id,title) VALUES('in_process','заявка в обработке');
+            INSERT INTO dictionary_status(id,title) VALUES('success','ок');
+            INSERT INTO dictionary_status(id,title) VALUES('error','ошибка!');
+        </sql>
+        <rollback>
+            <sql>
+                DELETE FROM dictionary_status;
+            </sql>
+        </rollback>
+    </changeSet>
+</databaseChangeLog>

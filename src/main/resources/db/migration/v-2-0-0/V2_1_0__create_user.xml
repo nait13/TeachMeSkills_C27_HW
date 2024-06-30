@@ -1,0 +1,17 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+
+
+    <changeSet id="1" author="Oleg">
+        <tagDatabase tag="create_user"/>
+    </changeSet>
+    
+    <changeSet id="1.1" author="Oleg">
+        <sqlFile path="src/main/resources/db/migration/v-2-0-0/sql/create_user.sql"/>
+        <rollback>
+            drop table public."user";
+        </rollback>
+    </changeSet>
+</databaseChangeLog>
