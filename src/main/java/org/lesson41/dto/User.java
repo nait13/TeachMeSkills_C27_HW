@@ -1,4 +1,4 @@
-package org.lesson41.DTO;
+package org.lesson41.dto;
 
 import lombok.Getter;
 import lombok.Setter;

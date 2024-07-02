@@ -1,6 +1,6 @@
 package org.lesson41.controller;
 
-import org.lesson41.DTO.User;
+import org.lesson41.dto.User;
 import org.lesson41.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
