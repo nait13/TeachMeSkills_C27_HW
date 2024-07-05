@@ -1,7 +1,6 @@
 package org.lesson41.service;
 
 
-import lombok.Builder;
 import org.lesson41.dto.User;
 import org.lesson41.postgres.driver.PostgresDriverManager;
 import org.springframework.beans.factory.annotation.Autowired;
