@@ -1,1 +1,0 @@
-INSERT INTO "user"(name) VALUES('Pasha'),('Sasha');

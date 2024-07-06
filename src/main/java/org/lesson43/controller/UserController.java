@@ -1,7 +1,7 @@
-package org.lesson41.controller;
+package org.lesson43.controller;
 
-import org.lesson41.dto.User;
-import org.lesson41.service.UserService;
+import org.lesson43.dto.User;
+import org.lesson43.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
