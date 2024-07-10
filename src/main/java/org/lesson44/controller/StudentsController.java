@@ -1,25 +1,18 @@
-package org.lesson43.controller;
+package org.lesson44.controller;
 
 import jakarta.validation.Valid;
-import org.lesson43.dao.StudentDAO;
-import org.lesson43.models.Student;
+import org.lesson44.dao.StudentDAO;
+import org.lesson44.models.Student;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @Controller
 @RequestMapping("/student")
 public class StudentsController {
     private StudentDAO studentDAO;
-
-    @Autowired
-    public void setStudentDAO(StudentDAO studentDAO) {
-        this.studentDAO = studentDAO;
-    }
 
     @GetMapping()
     public String getStudents(Model model) {
@@ -36,7 +29,6 @@ public class StudentsController {
     @PostMapping("/new")
     public String createStudent(@ModelAttribute("student") @Valid Student student, BindingResult bindingResult) {
         if(bindingResult.hasErrors()){
-            System.out.println("NOT VALID" + student);
             return "students/new";
         }else {
             boolean isSave = studentDAO.save(student);
@@ -46,17 +38,17 @@ public class StudentsController {
 
     @GetMapping("/{id}/edit")
     public String edit (@PathVariable("id") int id, Model model){
-        Student student =  studentDAO.show(id);
+        Student student =  studentDAO.getStudent(id);
 
         if(student != null) {
-            model.addAttribute("student", studentDAO.show(id));
+            model.addAttribute("student", student);
             return "students/edit";
         }else {
             return "students/index";
         }
     }
 
-    @PatchMapping("/{id}")
+    @PutMapping("/{id}")
     public String update(@ModelAttribute("student") @Valid Student student, BindingResult bindingResult , @PathVariable("id") int id) {
         if (bindingResult.hasErrors()){
             return "students/edit";
@@ -70,6 +62,11 @@ public class StudentsController {
     @DeleteMapping("/{id}")
     public String delete(@PathVariable("id") int id){
         boolean isDelete = studentDAO.delete(id);
-        return isDelete ? "redirect:/student" : "stedents/error";
+        return isDelete ? "redirect:/student" : "students/error";
+    }
+
+    @Autowired
+    public void setStudentDAO(StudentDAO studentDAO) {
+        this.studentDAO = studentDAO;
     }
 }

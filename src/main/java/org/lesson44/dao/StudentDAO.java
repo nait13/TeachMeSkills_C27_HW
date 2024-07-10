@@ -1,7 +1,7 @@
-package org.lesson43.dao;
+package org.lesson44.dao;
 
-import org.lesson43.models.Student;
-import org.lesson43.postgres.driver.PostgresDriverManager;
+import org.lesson44.models.Student;
+import org.lesson44.postgres.driver.PostgresDriverManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -15,11 +15,6 @@ import java.util.List;
 @Repository
 public class StudentDAO {
     private PostgresDriverManager postgresDriverManager;
-
-    @Autowired
-    public void setPostgresDriverManager(PostgresDriverManager postgresDriverManager) {
-        this.postgresDriverManager = postgresDriverManager;
-    }
 
     public List<Student> index() {
         try (Connection connection = postgresDriverManager.getConnection();
@@ -42,7 +37,7 @@ public class StudentDAO {
         return null;
     }
 
-    public Student show(int id) {
+    public Student getStudent(int id) {
         try (Connection connection = postgresDriverManager.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM students WHERE id = ?")) {
             preparedStatement.setInt(1, id);
@@ -104,5 +99,10 @@ public class StudentDAO {
             e.printStackTrace();
         }
         return false;
+    }
+
+    @Autowired
+    public void setPostgresDriverManager(PostgresDriverManager postgresDriverManager) {
+        this.postgresDriverManager = postgresDriverManager;
     }
 }

@@ -40,7 +40,7 @@
                 <div class="woocommerce">
                     <div id="signup_div_wrapper" class="bloc-center">
                         <h3 class="mb-1 text-center">Update student from TMS C27</h3>
-                        <form th:method="PATCH" th:action="@{/student/{id}(id = ${student.getId()})}" th:object="${student}" class="register row g-3 shadow-sm">
+                        <form th:method="PUT" th:action="@{/student/{id}(id = ${student.getId()})}" th:object="${student}" class="register row g-3 shadow-sm">
                             <div class="col-md-6" >
                                 <label for="name">First Name <span class="required">*</span></label>
                                 <input type="text" th:field="*{name}" th:classappend="${#fields.hasErrors('name')} ? 'is-invalid' : ''" class="input-text form-control" name="name" id="name" value="">

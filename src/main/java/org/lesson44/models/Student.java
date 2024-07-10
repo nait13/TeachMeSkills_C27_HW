@@ -1,10 +1,9 @@
-package org.lesson43.models;
+package org.lesson44.models;
 
 import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.validator.constraints.URL;
 
 @Setter
 @Getter

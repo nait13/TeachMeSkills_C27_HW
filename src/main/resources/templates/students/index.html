@@ -46,9 +46,9 @@
                 <td class="text-center" colspan="7">No Records found. Add some...!</td>
             </tr>
             <tr th:each="student : ${students}">
-                <td class="align-middle" th:text="${student.getName()}"></td>
-                <td class="align-middle" th:text="${student.getSurname()}"></td>
-                <td class="align-middle" th:text="${student.getGithub()}"></td>
+                <td class="align-middle" th:text="${student.name}"></td>
+                <td class="align-middle" th:text="${student.surname}"></td>
+                <td class="align-middle" th:text="${student.github}"></td>
                 <td class="align-middle text-center">
                     <a class="btn btn-secondary" th:href="@{/student/{id}/edit(id=${student.getId()})}">Change</a>
                     <form th:method="post" th:action="@{/student/{id}(id=${student.getId()})}" style="display: inline;">
