@@ -30,7 +30,7 @@ public class BankingController {
 
     }
 
-    @PostMapping(consumes = "application/json")
+    @PostMapping(value = "/transfer",consumes = "application/json")
     public ResponseEntity<?> transfer(@RequestBody TransferCardToCardDTO dto){
         System.out.println("DTO " + dto);
         try {
