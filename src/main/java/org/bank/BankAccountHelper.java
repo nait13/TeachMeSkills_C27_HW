@@ -6,8 +6,11 @@ public class BankAccountHelper
     public static String EUR_ACCOUNT = "EUR";
     public static String BYN_ACCOUNT = "BYN";
 
-    public double convertCurrency(String fromCurrency, String toCurrency, double amount)
-    {
+    public double convertCurrency(String fromCurrency, String toCurrency, double amount) throws IllegalArgumentException {
+        if (amount <= 0) {
+            throw new IllegalArgumentException("Amount cannot be negative");
+        }
+
         double result = amount;
         if (fromCurrency.equals(USD_ACCOUNT))
         {
