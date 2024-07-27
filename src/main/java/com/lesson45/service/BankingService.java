@@ -20,11 +20,7 @@ public class BankingService {
     private PostgresDriverManager postgresDriverManager;
 
     public Client getUserById(int id) throws SQLException {
-        String sql ="""
-                    SELECT clients.client_id ,card_id, name ,balance, card_number FROM clients
-                    JOIN cards ON clients.client_id = cards.client_id 
-                    WHERE clients.client_id = ?;
-                    """;
+        String sql ="SELECT clients.client_id ,card_id, name ,balance, card_number FROM clients JOIN cards ON clients.client_id = cards.client_id WHERE clients.client_id = ?;";
 
         try (Connection connection = postgresDriverManager.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -49,28 +45,23 @@ public class BankingService {
             if (client != null) {
                 client.setCards(cards);
                 return client;
-            } else {
-                throw new SQLException("Пользователь с id: " + id + " не найден!");
+            }else {
+                return null;
             }
         }
     }
 
-    public void transfer(TransferCardToCardDTO dto) throws SQLException, IllegalArgumentException {
+    public void transfer(TransferCardToCardDTO dto) throws SQLException {
         Connection connection = null;
         try {
-
-            if (dto.getAmount().compareTo(BigDecimal.ZERO) < 0){
-                throw new IllegalArgumentException("Сумма трансфера не может быть отрицательной.");
-            }
-
             connection = postgresDriverManager.getConnection();
             connection.setAutoCommit(false);
 
-            //Получаем карту клиента по ID клиента и ID карты и смотрим баланс
+            //Получаем карту клиента по ID клиента и ID карты
             String sqlCheckBalance = "SELECT balance FROM cards WHERE client_id = ? AND card_number = ?";
             PreparedStatement preparedStatementCheckBalance = connection.prepareStatement(sqlCheckBalance);
             preparedStatementCheckBalance.setInt(1, dto.getClientId());
-            preparedStatementCheckBalance.setString(2, dto.getCardFrom());
+            preparedStatementCheckBalance.setString(2, dto.getCardFrom().getCardNumber());
 
             ResultSet resultSet = preparedStatementCheckBalance.executeQuery();
 
@@ -81,17 +72,14 @@ public class BankingService {
             BigDecimal balanceFrom = resultSet.getBigDecimal("balance");
             BigDecimal transferAmount = dto.getAmount();
 
-            if(balanceFrom.compareTo(transferAmount) < 0) {
-                throw new SQLException("На карте не достаточно средств");
-            }
-
             //Отнять баланс карты отправителя
             BigDecimal newBalanceCard = balanceFrom.subtract(transferAmount);
+
             String sqlUpdateBalanceCard = "UPDATE cards SET balance = ? WHERE client_id = ? AND card_number = ?";
             PreparedStatement preparedStatementUpdateBalance = connection.prepareStatement(sqlUpdateBalanceCard);
             preparedStatementUpdateBalance.setBigDecimal(1, newBalanceCard);
             preparedStatementUpdateBalance.setInt(2, dto.getClientId());
-            preparedStatementUpdateBalance.setString(3, dto.getCardFrom());
+            preparedStatementUpdateBalance.setString(3, dto.getCardFrom().getCardNumber());
             preparedStatementUpdateBalance.executeUpdate();
 
 
