@@ -11,33 +11,43 @@ import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
 
+import static com.lesson45.util.Validation.isValidAmount;
+import static com.lesson45.util.Validation.isValidBalance;
+
 @RestController
 @RequestMapping("/banking")
 public class BankingController {
 
     @Autowired
-    BankingService bankingService;
+    private BankingService bankingService;
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getClientById(@PathVariable int id){
-        Client client = null;
         try {
-            client = bankingService.getUserById(id);
-            return  new ResponseEntity<>(client, HttpStatus.OK);
+            Client client = bankingService.getUserById(id);
+            if (client != null) {
+                return  new ResponseEntity<>(client, HttpStatus.OK);
+            }else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
         } catch (SQLException e) {
-            return new ResponseEntity<>(new AppError(HttpStatus.NOT_FOUND.value(),e.getMessage()),HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(),e.getMessage()),HttpStatus.BAD_REQUEST);
         }
-
     }
 
     @PostMapping(value = "/transfer",consumes = "application/json")
     public ResponseEntity<?> transfer(@RequestBody TransferCardToCardDTO dto){
-        System.out.println("DTO " + dto);
+        System.out.println(dto);
+
+        if(!isValidAmount(dto)) {
+            return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), "Сумма трансфера не может быть отрицательной."), HttpStatus.BAD_REQUEST);
+        }
+        if(!isValidBalance(dto)){
+            return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), "На карте не достаточно средств"), HttpStatus.BAD_REQUEST);
+        }
         try {
             bankingService.transfer(dto);
             return new ResponseEntity<>(HttpStatus.OK);
-        }catch (IllegalArgumentException e){
-            return new ResponseEntity<>(new AppError(400,e.getMessage()),HttpStatus.BAD_REQUEST);
         }catch (SQLException e) {
             return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(),e.getMessage()),HttpStatus.BAD_REQUEST);
         }
