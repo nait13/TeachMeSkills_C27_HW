@@ -46,6 +46,12 @@ public class UserController {
 
     @DeleteMapping("/{id}")
     public void deleteUser(@PathVariable int id){
-        userService.deleteUser(id);
+
+        User user = userService.getUserById(id);
+        if(user != null) {
+            userService.deleteUser(id);
+        }
+
+
     }
 }
