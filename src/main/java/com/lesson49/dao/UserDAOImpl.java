@@ -23,6 +23,7 @@ public class UserDAOImpl implements UserDAO{
         List<User> allUser = session.createQuery("from User", User.class).list();
         System.out.println(allUser);
         transaction.commit();
+        session.close();
         return allUser;
     }
 
@@ -31,6 +32,7 @@ public class UserDAOImpl implements UserDAO{
 
         User user = session.get(User.class, id);
         System.out.println(user);
+        session.close();
         return user;
     }
 
@@ -39,6 +41,7 @@ public class UserDAOImpl implements UserDAO{
         Transaction transaction = session.beginTransaction();
         session.saveOrUpdate(user);
         transaction.commit();
+        session.close();
     }
 
     @Override
@@ -48,5 +51,6 @@ public class UserDAOImpl implements UserDAO{
         Transaction t = session.beginTransaction();
         session.remove(person);
         t.commit();
+        session.close();
     }
 }
