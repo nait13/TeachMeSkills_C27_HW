@@ -1,6 +1,5 @@
 package com.lesson49.controller;
 
-import com.lesson49.dao.UserDAOImpl;
 import com.lesson49.entity.User;
 import com.lesson49.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,12 +16,12 @@ public class UserController {
     private UserService userService;
 
     @GetMapping
-    public ResponseEntity<List<User>> getAllUsers() {
+    public ResponseEntity<?> getAllUsers() {
         List<User> listUser = userService.getAllUser();
 
-        if(listUser == null || listUser.isEmpty()) {
+        if (listUser == null || listUser.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }else {
+        } else {
             return ResponseEntity.ok(listUser);
         }
 
@@ -35,7 +34,6 @@ public class UserController {
             return ResponseEntity.ok(user);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-
         }
     }
 
@@ -45,11 +43,15 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable int id){
+    public ResponseEntity<?> deleteUser(@PathVariable int id) {
 
         User user = userService.getUserById(id);
-        if(user != null) {
+
+        if (user != null) {
             userService.deleteUser(id);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
 
