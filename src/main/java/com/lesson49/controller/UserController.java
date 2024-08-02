@@ -20,7 +20,7 @@ public class UserController {
         List<User> listUser = userService.getAllUser();
 
         if (listUser == null || listUser.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(listUser,HttpStatus.NOT_FOUND);
         } else {
             return ResponseEntity.ok(listUser);
         }
