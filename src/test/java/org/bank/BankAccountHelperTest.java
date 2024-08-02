@@ -18,6 +18,7 @@ class BankAccountHelperTest {
         double amount = 100;
         double expected = amount * ExchangeRates.BYN_TO_EUR;
         double result = bankAccountHelper.convertCurrency(BankAccountHelper.BYN_ACCOUNT , BankAccountHelper.EUR_ACCOUNT, amount);
+
         assertEquals(expected,result,0.0001);
     }
     @Test
@@ -25,6 +26,7 @@ class BankAccountHelperTest {
         double amount = 100;
         double expected = amount * ExchangeRates.BYN_TO_USD;
         double result = bankAccountHelper.convertCurrency(BankAccountHelper.BYN_ACCOUNT , BankAccountHelper.USD_ACCOUNT, amount);
+
         assertEquals(expected,result,0.0001);
     }
 
@@ -33,6 +35,7 @@ class BankAccountHelperTest {
         double amount = 100;
         double expected = amount * ExchangeRates.EUR_TO_USD;
         double result = bankAccountHelper.convertCurrency(BankAccountHelper.EUR_ACCOUNT , BankAccountHelper.USD_ACCOUNT, amount);
+
         assertEquals(expected,result,0.0001);
     }
     @Test
@@ -40,6 +43,7 @@ class BankAccountHelperTest {
         double amount = 100;
         double expected = amount * ExchangeRates.EUR_TO_BYN;
         double result = bankAccountHelper.convertCurrency(BankAccountHelper.EUR_ACCOUNT , BankAccountHelper.BYN_ACCOUNT, amount);
+
         assertEquals(expected,result,0.0001);
     }
     @Test
@@ -47,6 +51,7 @@ class BankAccountHelperTest {
         double amount = 100;
         double expected = amount * ExchangeRates.USD_TO_BYN;
         double result = bankAccountHelper.convertCurrency(BankAccountHelper.USD_ACCOUNT , BankAccountHelper.BYN_ACCOUNT, amount);
+
         assertEquals(expected,result,0.0001);
     }
     @Test
@@ -54,6 +59,7 @@ class BankAccountHelperTest {
         double amount = 100;
         double expected = amount * ExchangeRates.USD_TO_EUR;
         double result = bankAccountHelper.convertCurrency(BankAccountHelper.USD_ACCOUNT , BankAccountHelper.EUR_ACCOUNT, amount);
+
         assertEquals(expected,result,0.0001);
     }
 
@@ -94,7 +100,6 @@ class BankAccountHelperTest {
         BankAccount account = new BankAccount();
         account.setCurrentBalance(100.0);
         account.setAccountCurrency(BankAccountHelper.USD_ACCOUNT);
-
 
         boolean result = bankAccountHelper.isBalanceValidForWithdraw(account,amount,BankAccountHelper.USD_ACCOUNT);
 

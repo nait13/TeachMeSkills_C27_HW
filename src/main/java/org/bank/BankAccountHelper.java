@@ -7,6 +7,7 @@ public class BankAccountHelper
     public static String BYN_ACCOUNT = "BYN";
 
     public double convertCurrency(String fromCurrency, String toCurrency, double amount) throws IllegalArgumentException {
+
         if (amount <= 0) {
             throw new IllegalArgumentException("Amount cannot be negative");
         }

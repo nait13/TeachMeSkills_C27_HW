@@ -24,6 +24,8 @@ class BankAccountManagerTest {
         double dailyLimit = 100.0;
         double amount = 10.0;
         double convertedAmount = amount * ExchangeRates.USD_TO_EUR;
+        double expectedBalanceAccountFrom = balance - convertedAmount;
+        double expectedDalyLimit = dailyLimit - convertedAmount;
 
         BankAccount bankAccountFrom = new BankAccount();
         bankAccountFrom.setAccountCurrency(BankAccountHelper.USD_ACCOUNT);
@@ -34,15 +36,11 @@ class BankAccountManagerTest {
         bankAccountTo.setAccountCurrency(BankAccountHelper.EUR_ACCOUNT);
         bankAccountTo.setDailyLimit(dailyLimit);
 
-        when(bankAccountHelper.isBalanceValidForWithdraw(bankAccountFrom, amount, BankAccountHelper.USD_ACCOUNT)).thenReturn(true);
-        when(bankAccountHelper.isAvailableForDailyWithdraw(bankAccountFrom, amount)).thenReturn(true);
-
-        when(bankAccountHelper.convertCurrency(BankAccountHelper.USD_ACCOUNT,BankAccountHelper.EUR_ACCOUNT, amount)).thenReturn(convertedAmount);
-
         bankAccountManager.transferMoney(bankAccountFrom, bankAccountTo, amount);
 
-        double expectedBalanceAccountFrom = balance - convertedAmount;
-        double expectedDalyLimit = dailyLimit - convertedAmount;
+        when(bankAccountHelper.isBalanceValidForWithdraw(bankAccountFrom, amount, BankAccountHelper.USD_ACCOUNT)).thenReturn(true);
+        when(bankAccountHelper.isAvailableForDailyWithdraw(bankAccountFrom, amount)).thenReturn(true);
+        when(bankAccountHelper.convertCurrency(BankAccountHelper.USD_ACCOUNT,BankAccountHelper.EUR_ACCOUNT, amount)).thenReturn(convertedAmount);
 
         assertEquals(expectedBalanceAccountFrom , bankAccountFrom.getCurrentBalance());
         assertEquals(expectedDalyLimit , bankAccountTo.getDailyLimit());
@@ -63,7 +61,6 @@ class BankAccountManagerTest {
         when(bankAccountHelper.isAvailableForDailyWithdraw(bankAccountFrom, amount)).thenReturn(false);
 
         assertThrows(InvalidBankOperationException.class, () -> bankAccountManager.transferMoney(bankAccountFrom, bankAccountTo, amount));
-
         verify(bankAccountHelper, never()).convertCurrency(BankAccountHelper.USD_ACCOUNT,BankAccountHelper.BYN_ACCOUNT,amount);
     }
     @Test
@@ -123,7 +120,6 @@ class BankAccountManagerTest {
         assertThrows(InvalidBankOperationException.class, ()->{
            bankAccountManager.withdrawMoney(bankAccountFrom,amount,BankAccountHelper.USD_ACCOUNT);
         });
-
         verify(bankAccountHelper, never()).convertCurrency(BankAccountHelper.USD_ACCOUNT,BankAccountHelper.EUR_ACCOUNT,amount);
     }
 
@@ -141,7 +137,6 @@ class BankAccountManagerTest {
         assertThrows(InvalidBankOperationException.class, ()->{
             bankAccountManager.withdrawMoney(bankAccountFrom,amount,BankAccountHelper.USD_ACCOUNT);
         });
-
         verify(bankAccountHelper, never()).convertCurrency(BankAccountHelper.USD_ACCOUNT,BankAccountHelper.EUR_ACCOUNT,amount);
     }
 
