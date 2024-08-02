@@ -4,32 +4,49 @@ import com.lesson49.entity.User;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
-import org.hibernate.cfg.Environment;
 import org.hibernate.service.ServiceRegistry;
-import org.springframework.context.annotation.*;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
-
-import java.util.Properties;
 
 
 @Component
 @ComponentScan(basePackages = "com.lesson49")
 public class HibernateUtil {
+    @Value("${hibernate.connection.driver_class}")
+    private String driverClass;
+
+    @Value("${hibernate.connection.url}")
+    private String url;
+
+    @Value("${hibernate.connection.username}")
+    private String username;
+
+    @Value("${hibernate.connection.password}")
+    private String password;
+
+    @Value("${hibernate.dialect}")
+    private String dialect;
+
+    @Value("${hibernate.show_sql}")
+    private String showSql;
+
+    @Value("${hibernate.current_session_context_class}")
+    private String currentSessionContextClass;
+
     @Bean
-    public static SessionFactory getSessionFactory() {
+    public SessionFactory getSessionFactory() {
         try {
             Configuration configuration = new Configuration();
 
-            Properties settings = new Properties();
-            settings.put(Environment.DRIVER, "org.postgresql.Driver");
-            settings.put(Environment.URL, "jdbc:postgresql://localhost:5432/tms");
-            settings.put(Environment.USER, "postgres");
-            settings.put(Environment.PASS, "admin");
-            settings.put(Environment.DIALECT, "org.hibernate.dialect.PostgreSQL10Dialect");
-            settings.put(Environment.SHOW_SQL, "true");
-            settings.put(Environment.CURRENT_SESSION_CONTEXT_CLASS, "thread");
-
-            configuration.setProperties(settings);
+            configuration.setProperty("hibernate.connection.driver_class", driverClass);
+            configuration.setProperty("hibernate.connection.url", url);
+            configuration.setProperty("hibernate.connection.username", username);
+            configuration.setProperty("hibernate.connection.password", password);
+            configuration.setProperty("hibernate.dialect", dialect);
+            configuration.setProperty("hibernate.show_sql", showSql);
+            configuration.setProperty("hibernate.current_session_context_class", currentSessionContextClass);
 
             configuration.addAnnotatedClass(User.class);
 
