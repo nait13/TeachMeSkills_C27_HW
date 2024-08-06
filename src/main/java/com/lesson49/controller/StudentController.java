@@ -1,59 +1,74 @@
 package com.lesson49.controller;
 
-import com.lesson49.entity.User;
-import com.lesson49.service.UserService;
+import com.lesson49.dao.StudentDAO;
+import com.lesson49.entity.Student;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
+import java.util.Map;
 
 @Controller
-@RequestMapping("/user")
+@RequestMapping("/student")
 public class StudentController {
 
     @Autowired
-    private UserService userService;
+    private StudentDAO studentDAO;
 
     @GetMapping
-    public ResponseEntity<?> getAllUsers() {
-        List<User> listUser = userService.getAllUser();
+    public String enterGroupView(){
+        return "students/enterGrooup";
+    }
+    @GetMapping("/top")
+    public String getTopStudentInGroup(Model model){
+        Map<String,List<Student>> topStudentsByGroup = studentDAO.getTopStudentsByGroup();
+        model.addAttribute("topStudentsByGroup",topStudentsByGroup);
+        model.addAttribute("title","Top 3 Students by Group");
+        return "students/showStudent";
+    }
 
-        if (listUser == null || listUser.isEmpty()) {
-            return new ResponseEntity<>(listUser,HttpStatus.NOT_FOUND);
-        } else {
-            return ResponseEntity.ok(listUser);
+    @GetMapping("/avg")
+    public String getAvgStudent(Model model){
+        Map<String,List<Student>> belowAverageStudents = studentDAO.getAveragePerformanceStudentInGroups();
+        model.addAttribute("topStudentsByGroup",belowAverageStudents);
+        model.addAttribute("title","Below average students");
+        return "students/showStudent";
+    }
+    
+    @GetMapping("/group")
+    public String getGroup(
+            @RequestParam(value = "title") String title,
+            @RequestParam(value = "sortOrder", required = false, defaultValue = "asc") String sortOrder,
+            @RequestParam(value = "page", defaultValue = "1") int page,
+            Model model) {
+
+        String upTitle = title.toUpperCase();
+        int pageSize = 3;
+        boolean isAscending = false;
+        if(sortOrder.equals("asc")){
+               isAscending = true;
         }
 
-    }
+        List<Student> students = studentDAO.getStudentsByGroup(upTitle, page, pageSize, isAscending);
+        long totalStudents = studentDAO.getTotalStudentsCountByGroup(upTitle);
 
-    @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable int id) {
-        User user = userService.getUserById(id);
-        if (user != null) {
-            return ResponseEntity.ok(user);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        int totalPages = (int) Math.ceil((double) totalStudents / pageSize);
+
+        if (!students.isEmpty()) {
+            String titleGroup  = students.get(0).getGrooup().getTitle();
+            model.addAttribute("title", titleGroup);
         }
+
+        model.addAttribute("students", students);
+        model.addAttribute("sortOrder", sortOrder);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages);
+
+        return "students/index";
     }
 
-    @PostMapping
-    public void createUser(@RequestBody User user) {
-        userService.saveUser(user);
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteUser(@PathVariable int id) {
-
-        User user = userService.getUserById(id);
-
-        if (user != null) {
-            userService.deleteUser(id);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
 }

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>All students</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <style>
+        .myselect{
+            width: 10%;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <h1 th:text="${title != null ? 'Students tms ' + title : 'Students not found'}"></h1>
+    <form id="sortForm" action="/student/group" method="get">
+        <input type="hidden" name="title" th:value="${title}" />
+
+        <select class="form-select form-select-sm myselect" name="sortOrder" aria-label="Small select example" onchange="this.form.submit()">
+            <option th:selected="${sortOrder == ''}" value="">Sort by</option>
+            <option th:selected="${sortOrder == 'desc'}" value="desc">desc</option>
+            <option th:selected="${sortOrder == 'asc'}" value="asc">asc</option>
+        </select>
+    </form>
+
+    <table class="table table-bordered ">
+        <tr>
+            <th>№</th>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Age</th>
+            <th>Group Title</th>
+            <th>Group Room</th>
+            <th>Rating</th>
+<!--            <th>Action</th>-->
+        </tr>
+        <tr th:if="${students.isEmpty()}">
+            <td class="text-center" colspan="7">Not found group!</td>
+        </tr>
+        <tr th:each="student ,start : ${students}">
+            <td class="align-middle" th:text="${start.index + 1}"></td>
+            <td class="align-middle" th:text="${student.id}"></td>
+            <td class="align-middle" th:text="${student.name}"></td>
+            <td class="align-middle" th:text="${student.age}"></td>
+            <td class="align-middle" th:text="${student.getGrooup().title}"></td>
+            <td class="align-middle" th:text="${student.getGrooup().room}"></td>
+            <td class="align-middle" th:text="${student.getRecordBook().rating}"></td>
+<!--            <td class="align-middle text-center">-->
+<!--                <a class="btn btn-secondary" th:href="@{/student/{id}/edit(id=${student.getId()})}">Change</a>-->
+<!--                    <form th:method="post" th:action="@{/student/{id}(id=${student.getId()})}" style="display: inline;">-->
+<!--                        <input type="hidden" name="_method" value="DELETE">-->
+<!--                        <button type="submit" class="btn btn-danger">Delete</button>-->
+<!--                    </form>-->
+<!--            </td>-->
+        </tr>
+    </table>
+    <!-- Пагинация -->
+    <div class="pagination">
+        <span th:if="${currentPage > 1}">
+            <a th:href="@{/student/group(title=${title}, sortOrder=${sortOrder}, page=${currentPage - 1})}">&lt; Previous</a>
+        </span>
+        <span th:text="'Page ' + ${currentPage} + ' of ' + ${totalPages}"></span>
+        <span th:if="${currentPage < totalPages}">
+            <a  th:href="@{/student/group(title=${title}, sortOrder=${sortOrder}, page=${currentPage + 1})}">Next &gt;</a>
+        </span>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+</body>
+</html>
